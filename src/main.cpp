@@ -1,9 +1,10 @@
+#define EIDSP_QUANTIZE_FILTERBANK   0
 #include <Speech_emotion_inferencing.h>
 #include <I2S.h>
 #include <M5StickCPlus.h>
 
 #define SAMPLE_RATE 24000U  
-#define SAMPLE_BITS 16
+#define SAMPLE_BITS 32
 
 /** Audio buffers, pointers and selectors */
 typedef struct {
@@ -109,7 +110,6 @@ void setup()
 {
     Serial.begin(115200);
 
-    // Init M5Stack Display
     M5.begin();
     M5.Lcd.setTextSize(2);
     M5.Lcd.setTextColor(WHITE, BLACK);

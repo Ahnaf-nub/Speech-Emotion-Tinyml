@@ -48,34 +48,39 @@
 
 const char* ei_classifier_inferencing_categories[] = { "Angry", "Disgust", "Fear", "Happy", "Neutral", "Noise", "Pleasant Surprise", "Sad" };
 
-ei_dsp_named_axis_t ei_dsp_config_6_named_axes[] = {
+ei_dsp_named_axis_t ei_dsp_config_12_named_axes[] = {
     { .name = "Signal", .axis = 0 }
 };
-size_t ei_dsp_config_6_named_axes_size = 1;
-EI_CLASSIFIER_DSP_AXES_INDEX_TYPE ei_dsp_config_6_axes[] = { 0 };
-const uint32_t ei_dsp_config_6_axes_size = 1;
-ei_dsp_config_spectrogram_t ei_dsp_config_6 = {
-    6, // uint32_t blockId
+size_t ei_dsp_config_12_named_axes_size = 1;
+EI_CLASSIFIER_DSP_AXES_INDEX_TYPE ei_dsp_config_12_axes[] = { 0 };
+const uint32_t ei_dsp_config_12_axes_size = 1;
+ei_dsp_config_mfcc_t ei_dsp_config_12 = {
+    12, // uint32_t blockId
     4, // int implementationVersion
     1, // int length of axes
-    ei_dsp_config_6_named_axes, // named axes
-    ei_dsp_config_6_named_axes_size, // size of the named axes array
+    ei_dsp_config_12_named_axes, // named axes
+    ei_dsp_config_12_named_axes_size, // size of the named axes array
+    13, // int num_cepstral
     0.02f, // float frame_length
-    0.01f, // float frame_stride
-    128, // int fft_length
-    -52, // int noise_floor_db
-    true // boolean show_axes
+    0.02f, // float frame_stride
+    32, // int num_filters
+    256, // int fft_length
+    101, // int win_size
+    0, // int low_frequency
+    0, // int high_frequency
+    0.98f, // float pre_cof
+    1 // int pre_shift
 };
 
 const uint8_t ei_dsp_blocks_size = 1;
 ei_model_dsp_t ei_dsp_blocks[ei_dsp_blocks_size] = {
-    { // DSP block 6
-        6,
-        9620, // output size
-        &extract_spectrogram_features, // DSP function pointer
-        (void*)&ei_dsp_config_6, // pointer to config struct
-        ei_dsp_config_6_axes, // array of offsets into the input stream, one for each axis
-        ei_dsp_config_6_axes_size, // number of axes
+    { // DSP block 12
+        12,
+        962, // output size
+        &extract_mfcc_features, // DSP function pointer
+        (void*)&ei_dsp_config_12, // pointer to config struct
+        ei_dsp_config_12_axes, // array of offsets into the input stream, one for each axis
+        ei_dsp_config_12_axes_size, // number of axes
         1, // version
         nullptr, // factory function
     }
@@ -105,7 +110,7 @@ ei_learning_block_config_tflite_graph_t ei_learning_block_config_7 = {
 };
 
 const uint8_t ei_learning_blocks_size = 1;
-const uint32_t ei_learning_block_7_inputs[1] = { 6 };
+const uint32_t ei_learning_block_7_inputs[1] = { 12 };
 const uint8_t ei_learning_block_7_inputs_size = 1;
 const ei_learning_block_t ei_learning_blocks[ei_learning_blocks_size] = {
     {
@@ -120,25 +125,8 @@ const ei_learning_block_t ei_learning_blocks[ei_learning_blocks_size] = {
     },
 };
 
-const ei_performance_calibration_config_t ei_posprocessing_config_8 = {
-    1, /* integer version number */
-    true, /* has configured performance calibration */
-    294, /* average duration window ms */
-    0.3914956927805556, /* detection threshold */
-    100,  /* suppression ms */
-    0xDF, /* suppression flags */
-};
-const size_t ei_postprocessing_blocks_size = 1;
-const ei_postprocessing_block_t ei_postprocessing_blocks[ei_postprocessing_blocks_size] = {
-    {
-        .block_id = 8,
-        .init_fn = &init_perfcal,
-        .deinit_fn = &deinit_perfcal,
-        .postprocess_fn = &process_perfcal,
-        .display_fn = &display_perfcal,
-        .config = (void*)&ei_posprocessing_config_8
-    },
-};
+const size_t ei_postprocessing_blocks_size = 0;
+const ei_postprocessing_block_t *ei_postprocessing_blocks = nullptr;
 
 const ei_object_detection_nms_config_t ei_object_detection_nms = {
     0.0f, /* NMS confidence threshold */
@@ -151,9 +139,9 @@ const ei_impulse_t impulse_685564_0 = {
     .project_name = "Speech_emotion",
     .impulse_id = 1,
     .impulse_name = "Impulse #1",
-    .deploy_version = 6,
+    .deploy_version = 7,
 
-    .nn_input_frame_size = 9620,
+    .nn_input_frame_size = 962,
     .raw_sample_count = 36621,
     .raw_samples_per_frame = 1,
     .dsp_input_frame_size = 36621 * 1,
