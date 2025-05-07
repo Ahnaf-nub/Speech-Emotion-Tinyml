@@ -42,62 +42,56 @@
 #include <stdint.h>
 #include "model_metadata.h"
 
-#include "tflite-model/tflite_learn_17_compiled.h"
+#include "tflite-model/tflite_learn_50_compiled.h"
 #include "edge-impulse-sdk/classifier/ei_model_types.h"
 #include "edge-impulse-sdk/classifier/inferencing_engines/engines.h"
 
 const char* ei_classifier_inferencing_categories[] = { "Angry", "Disgust", "Fear", "Happy", "Neutral", "Noise" };
 
-ei_dsp_named_axis_t ei_dsp_config_16_named_axes[] = {
-    { .name = "Signal", .axis = 0 }
-};
-size_t ei_dsp_config_16_named_axes_size = 1;
-EI_CLASSIFIER_DSP_AXES_INDEX_TYPE ei_dsp_config_16_axes[] = { 0 };
-const uint32_t ei_dsp_config_16_axes_size = 1;
-ei_dsp_config_mfcc_t ei_dsp_config_16 = {
-    16, // uint32_t blockId
+EI_CLASSIFIER_DSP_AXES_INDEX_TYPE ei_dsp_config_49_axes[] = { 0 };
+const uint32_t ei_dsp_config_49_axes_size = 1;
+ei_dsp_config_mfe_t ei_dsp_config_49 = {
+    49, // uint32_t blockId
     4, // int implementationVersion
     1, // int length of axes
-    ei_dsp_config_16_named_axes, // named axes
-    ei_dsp_config_16_named_axes_size, // size of the named axes array
-    13, // int num_cepstral
-    0.025f, // float frame_length
-    0.02f, // float frame_stride
+    NULL, // named axes
+    0, // size of the named axes array
+    0.032f, // float frame_length
+    0.032f, // float frame_stride
     32, // int num_filters
-    512, // int fft_length
-    151, // int win_size
-    80, // int low_frequency
+    256, // int fft_length
+    0, // int low_frequency
     0, // int high_frequency
-    0.98f, // float pre_cof
-    1 // int pre_shift
+    101, // int win_size
+    -52 // int noise_floor_db
 };
 
 const uint8_t ei_dsp_blocks_size = 1;
 ei_model_dsp_t ei_dsp_blocks[ei_dsp_blocks_size] = {
-    { // DSP block 16
-        16,
-        637, // output size
-        &extract_mfcc_features, // DSP function pointer
-        (void*)&ei_dsp_config_16, // pointer to config struct
-        ei_dsp_config_16_axes, // array of offsets into the input stream, one for each axis
-        ei_dsp_config_16_axes_size, // number of axes
+    { // DSP block 49
+        49,
+        992, // output size
+        &extract_mfe_features, // DSP function pointer
+        (void*)&ei_dsp_config_49, // pointer to config struct
+        ei_dsp_config_49_axes, // array of offsets into the input stream, one for each axis
+        ei_dsp_config_49_axes_size, // number of axes
         1, // version
         nullptr, // factory function
     }
 };
-const ei_config_tflite_eon_graph_t ei_config_tflite_graph_17 = {
+const ei_config_tflite_eon_graph_t ei_config_tflite_graph_50 = {
     .implementation_version = 1,
-    .model_init = &tflite_learn_17_init,
-    .model_invoke = &tflite_learn_17_invoke,
-    .model_reset = &tflite_learn_17_reset,
-    .model_input = &tflite_learn_17_input,
-    .model_output = &tflite_learn_17_output,
+    .model_init = &tflite_learn_50_init,
+    .model_invoke = &tflite_learn_50_invoke,
+    .model_reset = &tflite_learn_50_reset,
+    .model_input = &tflite_learn_50_input,
+    .model_output = &tflite_learn_50_output,
 };
 
-ei_learning_block_config_tflite_graph_t ei_learning_block_config_17 = {
+ei_learning_block_config_tflite_graph_t ei_learning_block_config_50 = {
     .implementation_version = 1,
     .classification_mode = EI_CLASSIFIER_CLASSIFICATION_MODE_CLASSIFICATION,
-    .block_id = 17,
+    .block_id = 50,
     .object_detection = 0,
     .object_detection_last_layer = EI_CLASSIFIER_LAST_LAYER_UNKNOWN,
     .output_data_tensor = 0,
@@ -106,27 +100,44 @@ ei_learning_block_config_tflite_graph_t ei_learning_block_config_17 = {
     .threshold = 0,
     .quantized = 1,
     .compiled = 1,
-    .graph_config = (void*)&ei_config_tflite_graph_17
+    .graph_config = (void*)&ei_config_tflite_graph_50
 };
 
 const uint8_t ei_learning_blocks_size = 1;
-const uint32_t ei_learning_block_17_inputs[1] = { 16 };
-const uint8_t ei_learning_block_17_inputs_size = 1;
+const uint32_t ei_learning_block_50_inputs[1] = { 49 };
+const uint8_t ei_learning_block_50_inputs_size = 1;
 const ei_learning_block_t ei_learning_blocks[ei_learning_blocks_size] = {
     {
-        17,
+        50,
         false,
         &run_nn_inference,
-        (void*)&ei_learning_block_config_17,
+        (void*)&ei_learning_block_config_50,
         EI_CLASSIFIER_IMAGE_SCALING_NONE,
-        ei_learning_block_17_inputs,
-        ei_learning_block_17_inputs_size,
+        ei_learning_block_50_inputs,
+        ei_learning_block_50_inputs_size,
         6
     },
 };
 
-const size_t ei_postprocessing_blocks_size = 0;
-const ei_postprocessing_block_t *ei_postprocessing_blocks = nullptr;
+const ei_performance_calibration_config_t ei_posprocessing_config_51 = {
+    1, /* integer version number */
+    true, /* has configured performance calibration */
+    188, /* average duration window ms */
+    0.49750981164141833, /* detection threshold */
+    1318,  /* suppression ms */
+    0x1F, /* suppression flags */
+};
+const size_t ei_postprocessing_blocks_size = 1;
+const ei_postprocessing_block_t ei_postprocessing_blocks[ei_postprocessing_blocks_size] = {
+    {
+        .block_id = 51,
+        .init_fn = &init_perfcal,
+        .deinit_fn = &deinit_perfcal,
+        .postprocess_fn = &process_perfcal,
+        .display_fn = &display_perfcal,
+        .config = (void*)&ei_posprocessing_config_51
+    },
+};
 
 const ei_object_detection_nms_config_t ei_object_detection_nms = {
     0.0f, /* NMS confidence threshold */
@@ -137,11 +148,11 @@ const ei_impulse_t impulse_685564_0 = {
     .project_id = 685564,
     .project_owner = "Ahnaf",
     .project_name = "Speech_emotion",
-    .impulse_id = 1,
-    .impulse_name = "Impulse #1",
-    .deploy_version = 11,
+    .impulse_id = 8,
+    .impulse_name = "mfe-conv2d-cda",
+    .deploy_version = 13,
 
-    .nn_input_frame_size = 637,
+    .nn_input_frame_size = 992,
     .raw_sample_count = 16000,
     .raw_samples_per_frame = 1,
     .dsp_input_frame_size = 16000 * 1,
