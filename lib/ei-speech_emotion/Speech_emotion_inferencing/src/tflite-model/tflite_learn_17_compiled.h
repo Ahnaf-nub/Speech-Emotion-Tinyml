@@ -28,31 +28,31 @@
  * either express or implied. See the License for the specific language governing
  * permissions, disclaimers and limitations under the License.
  */
-// Generated on: 06.05.2025 02:28:21
+// Generated on: 07.05.2025 05:31:10
 
-#ifndef tflite_learn_7_GEN_H
-#define tflite_learn_7_GEN_H
+#ifndef tflite_learn_17_GEN_H
+#define tflite_learn_17_GEN_H
 
 #include "edge-impulse-sdk/tensorflow/lite/c/common.h"
 
 // Sets up the model with init and prepare steps.
-TfLiteStatus tflite_learn_7_init( void*(*alloc_fnc)(size_t,size_t) );
+TfLiteStatus tflite_learn_17_init( void*(*alloc_fnc)(size_t,size_t) );
 // Returns the input tensor with the given index.
-TfLiteStatus tflite_learn_7_input(int index, TfLiteTensor* tensor);
+TfLiteStatus tflite_learn_17_input(int index, TfLiteTensor* tensor);
 // Returns the output tensor with the given index.
-TfLiteStatus tflite_learn_7_output(int index, TfLiteTensor* tensor);
+TfLiteStatus tflite_learn_17_output(int index, TfLiteTensor* tensor);
 // Runs inference for the model.
-TfLiteStatus tflite_learn_7_invoke();
+TfLiteStatus tflite_learn_17_invoke();
 //Frees memory allocated
-TfLiteStatus tflite_learn_7_reset( void (*free)(void* ptr) );
+TfLiteStatus tflite_learn_17_reset( void (*free)(void* ptr) );
 
 
 // Returns the number of input tensors.
-inline size_t tflite_learn_7_inputs() {
+inline size_t tflite_learn_17_inputs() {
   return 1;
 }
 // Returns the number of output tensors.
-inline size_t tflite_learn_7_outputs() {
+inline size_t tflite_learn_17_outputs() {
   return 1;
 }
 

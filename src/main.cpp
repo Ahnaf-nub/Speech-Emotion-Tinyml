@@ -3,8 +3,8 @@
 #include <I2S.h>
 #include <M5StickCPlus.h>
 
-#define SAMPLE_RATE 24000U  
-#define SAMPLE_BITS 32
+#define SAMPLE_RATE 16000U  
+#define SAMPLE_BITS 16
 
 /** Audio buffers, pointers and selectors */
 typedef struct {
@@ -21,8 +21,7 @@ static bool debug_nn = false; // Set this to true to see e.g. features generated
 static bool record_status = true;
 
 
-static void audio_inference_callback(uint32_t n_bytes)
-{
+static void audio_inference_callback(uint32_t n_bytes) {
     for(int i = 0; i < n_bytes >> 1; i++) {
         inference.buffer[inference.buf_count++] = sampleBuffer[i];
 
@@ -64,8 +63,7 @@ static void capture_samples(void* arg) {
     vTaskDelete(NULL);
 }
 
-static bool microphone_inference_start(uint32_t n_samples)
-{
+static bool microphone_inference_start(uint32_t n_samples) {
     inference.buffer = (int16_t *)malloc(n_samples * sizeof(int16_t));
 
     if(inference.buffer == NULL) {
@@ -84,8 +82,7 @@ static bool microphone_inference_start(uint32_t n_samples)
     return true;
 }
 
-static bool microphone_inference_record(void)
-{
+static bool microphone_inference_record(void) {
     while (inference.buf_ready == 0) {
         delay(10);
     }
@@ -94,20 +91,17 @@ static bool microphone_inference_record(void)
     return true;
 }
 
-static int microphone_audio_signal_get_data(size_t offset, size_t length, float *out_ptr)
-{
+static int microphone_audio_signal_get_data(size_t offset, size_t length, float *out_ptr) {
     numpy::int16_to_float(&inference.buffer[offset], out_ptr, length);
     return 0;
 }
 
-static void microphone_inference_end(void)
-{
+static void microphone_inference_end(void) {
     free(sampleBuffer);
     ei_free(inference.buffer);
 }
 
-void setup()
-{
+void setup() {
     Serial.begin(115200);
 
     M5.begin();
@@ -143,8 +137,7 @@ void setup()
     ei_printf("Recording...\n");
 }
 
-void loop()
-{
+void loop() {
     bool m = microphone_inference_record();
     if (!m) {
         ei_printf("ERR: Failed to record audio...\n");
@@ -168,7 +161,7 @@ void loop()
     ei_printf(":\n");
 
     M5.Lcd.fillScreen(BLACK);
-    M5.Lcd.setCursor(0, 20);
+    M5.Lcd.setCursor(0, 50);
     for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
         ei_printf("    %s: ", result.classification[ix].label);
         ei_printf_float(result.classification[ix].value);

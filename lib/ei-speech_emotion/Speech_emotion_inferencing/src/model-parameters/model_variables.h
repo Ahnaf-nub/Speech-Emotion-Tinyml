@@ -42,31 +42,31 @@
 #include <stdint.h>
 #include "model_metadata.h"
 
-#include "tflite-model/tflite_learn_7_compiled.h"
+#include "tflite-model/tflite_learn_17_compiled.h"
 #include "edge-impulse-sdk/classifier/ei_model_types.h"
 #include "edge-impulse-sdk/classifier/inferencing_engines/engines.h"
 
-const char* ei_classifier_inferencing_categories[] = { "Angry", "Disgust", "Fear", "Happy", "Neutral", "Noise", "Pleasant Surprise", "Sad" };
+const char* ei_classifier_inferencing_categories[] = { "Angry", "Disgust", "Fear", "Happy", "Neutral", "Noise" };
 
-ei_dsp_named_axis_t ei_dsp_config_12_named_axes[] = {
+ei_dsp_named_axis_t ei_dsp_config_16_named_axes[] = {
     { .name = "Signal", .axis = 0 }
 };
-size_t ei_dsp_config_12_named_axes_size = 1;
-EI_CLASSIFIER_DSP_AXES_INDEX_TYPE ei_dsp_config_12_axes[] = { 0 };
-const uint32_t ei_dsp_config_12_axes_size = 1;
-ei_dsp_config_mfcc_t ei_dsp_config_12 = {
-    12, // uint32_t blockId
+size_t ei_dsp_config_16_named_axes_size = 1;
+EI_CLASSIFIER_DSP_AXES_INDEX_TYPE ei_dsp_config_16_axes[] = { 0 };
+const uint32_t ei_dsp_config_16_axes_size = 1;
+ei_dsp_config_mfcc_t ei_dsp_config_16 = {
+    16, // uint32_t blockId
     4, // int implementationVersion
     1, // int length of axes
-    ei_dsp_config_12_named_axes, // named axes
-    ei_dsp_config_12_named_axes_size, // size of the named axes array
+    ei_dsp_config_16_named_axes, // named axes
+    ei_dsp_config_16_named_axes_size, // size of the named axes array
     13, // int num_cepstral
-    0.02f, // float frame_length
+    0.025f, // float frame_length
     0.02f, // float frame_stride
     32, // int num_filters
-    256, // int fft_length
-    101, // int win_size
-    0, // int low_frequency
+    512, // int fft_length
+    151, // int win_size
+    80, // int low_frequency
     0, // int high_frequency
     0.98f, // float pre_cof
     1 // int pre_shift
@@ -74,30 +74,30 @@ ei_dsp_config_mfcc_t ei_dsp_config_12 = {
 
 const uint8_t ei_dsp_blocks_size = 1;
 ei_model_dsp_t ei_dsp_blocks[ei_dsp_blocks_size] = {
-    { // DSP block 12
-        12,
-        962, // output size
+    { // DSP block 16
+        16,
+        637, // output size
         &extract_mfcc_features, // DSP function pointer
-        (void*)&ei_dsp_config_12, // pointer to config struct
-        ei_dsp_config_12_axes, // array of offsets into the input stream, one for each axis
-        ei_dsp_config_12_axes_size, // number of axes
+        (void*)&ei_dsp_config_16, // pointer to config struct
+        ei_dsp_config_16_axes, // array of offsets into the input stream, one for each axis
+        ei_dsp_config_16_axes_size, // number of axes
         1, // version
         nullptr, // factory function
     }
 };
-const ei_config_tflite_eon_graph_t ei_config_tflite_graph_7 = {
+const ei_config_tflite_eon_graph_t ei_config_tflite_graph_17 = {
     .implementation_version = 1,
-    .model_init = &tflite_learn_7_init,
-    .model_invoke = &tflite_learn_7_invoke,
-    .model_reset = &tflite_learn_7_reset,
-    .model_input = &tflite_learn_7_input,
-    .model_output = &tflite_learn_7_output,
+    .model_init = &tflite_learn_17_init,
+    .model_invoke = &tflite_learn_17_invoke,
+    .model_reset = &tflite_learn_17_reset,
+    .model_input = &tflite_learn_17_input,
+    .model_output = &tflite_learn_17_output,
 };
 
-ei_learning_block_config_tflite_graph_t ei_learning_block_config_7 = {
+ei_learning_block_config_tflite_graph_t ei_learning_block_config_17 = {
     .implementation_version = 1,
     .classification_mode = EI_CLASSIFIER_CLASSIFICATION_MODE_CLASSIFICATION,
-    .block_id = 7,
+    .block_id = 17,
     .object_detection = 0,
     .object_detection_last_layer = EI_CLASSIFIER_LAST_LAYER_UNKNOWN,
     .output_data_tensor = 0,
@@ -106,22 +106,22 @@ ei_learning_block_config_tflite_graph_t ei_learning_block_config_7 = {
     .threshold = 0,
     .quantized = 1,
     .compiled = 1,
-    .graph_config = (void*)&ei_config_tflite_graph_7
+    .graph_config = (void*)&ei_config_tflite_graph_17
 };
 
 const uint8_t ei_learning_blocks_size = 1;
-const uint32_t ei_learning_block_7_inputs[1] = { 12 };
-const uint8_t ei_learning_block_7_inputs_size = 1;
+const uint32_t ei_learning_block_17_inputs[1] = { 16 };
+const uint8_t ei_learning_block_17_inputs_size = 1;
 const ei_learning_block_t ei_learning_blocks[ei_learning_blocks_size] = {
     {
-        7,
+        17,
         false,
         &run_nn_inference,
-        (void*)&ei_learning_block_config_7,
+        (void*)&ei_learning_block_config_17,
         EI_CLASSIFIER_IMAGE_SCALING_NONE,
-        ei_learning_block_7_inputs,
-        ei_learning_block_7_inputs_size,
-        8
+        ei_learning_block_17_inputs,
+        ei_learning_block_17_inputs_size,
+        6
     },
 };
 
@@ -139,17 +139,17 @@ const ei_impulse_t impulse_685564_0 = {
     .project_name = "Speech_emotion",
     .impulse_id = 1,
     .impulse_name = "Impulse #1",
-    .deploy_version = 7,
+    .deploy_version = 10,
 
-    .nn_input_frame_size = 962,
-    .raw_sample_count = 36621,
+    .nn_input_frame_size = 637,
+    .raw_sample_count = 16000,
     .raw_samples_per_frame = 1,
-    .dsp_input_frame_size = 36621 * 1,
+    .dsp_input_frame_size = 16000 * 1,
     .input_width = 0,
     .input_height = 0,
     .input_frames = 0,
-    .interval_ms = 0.04096010485786843,
-    .frequency = 24414,
+    .interval_ms = 0.0625,
+    .frequency = 16000,
     .dsp_blocks_size = ei_dsp_blocks_size,
     .dsp_blocks = ei_dsp_blocks,
     
@@ -160,7 +160,7 @@ const ei_impulse_t impulse_685564_0 = {
     .visual_ad_grid_size_x = 0,
     .visual_ad_grid_size_y = 0,
     
-    .tflite_output_features_count = 8,
+    .tflite_output_features_count = 6,
     .learning_blocks_size = ei_learning_blocks_size,
     .learning_blocks = ei_learning_blocks,
 
@@ -171,11 +171,11 @@ const ei_impulse_t impulse_685564_0 = {
 
     .sensor = EI_CLASSIFIER_SENSOR_MICROPHONE,
     .fusion_string = "audio",
-    .slice_size = (36621/4),
+    .slice_size = (16000/4),
     .slices_per_model_window = 4,
 
     .has_anomaly = EI_ANOMALY_TYPE_UNKNOWN,
-    .label_count = 8,
+    .label_count = 6,
     .categories = ei_classifier_inferencing_categories,
     .object_detection_nms = ei_object_detection_nms
 };
