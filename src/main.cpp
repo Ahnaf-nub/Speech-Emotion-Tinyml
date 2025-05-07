@@ -161,12 +161,12 @@ void loop() {
     ei_printf(":\n");
 
     M5.Lcd.fillScreen(BLACK);
-    M5.Lcd.setCursor(0, 50);
+    M5.Lcd.setTextColor(PURPLE, BLACK);
+    M5.Lcd.setCursor(0, 10);
     for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
         ei_printf("    %s: ", result.classification[ix].label);
         ei_printf_float(result.classification[ix].value);
         ei_printf("\n");
-
-        M5.Lcd.printf("%s: %.2f\n", result.classification[ix].label, result.classification[ix].value);
+        M5.Lcd.printf("%s: %.1f\n\n", result.classification[ix].label, result.classification[ix].value);
     }
 }

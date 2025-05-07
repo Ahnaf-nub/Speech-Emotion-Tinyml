@@ -139,7 +139,7 @@ const ei_impulse_t impulse_685564_0 = {
     .project_name = "Speech_emotion",
     .impulse_id = 1,
     .impulse_name = "Impulse #1",
-    .deploy_version = 10,
+    .deploy_version = 11,
 
     .nn_input_frame_size = 637,
     .raw_sample_count = 16000,
