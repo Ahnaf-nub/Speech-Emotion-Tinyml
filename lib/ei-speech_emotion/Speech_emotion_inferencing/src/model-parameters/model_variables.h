@@ -42,16 +42,16 @@
 #include <stdint.h>
 #include "model_metadata.h"
 
-#include "tflite-model/tflite_learn_50_compiled.h"
+#include "tflite-model/tflite_learn_121_compiled.h"
 #include "edge-impulse-sdk/classifier/ei_model_types.h"
 #include "edge-impulse-sdk/classifier/inferencing_engines/engines.h"
 
-const char* ei_classifier_inferencing_categories[] = { "Angry", "Disgust", "Fear", "Happy", "Neutral", "Noise" };
+const char* ei_classifier_inferencing_categories[] = { "Angry", "Fear", "Happy", "Neutral", "Noise" };
 
-EI_CLASSIFIER_DSP_AXES_INDEX_TYPE ei_dsp_config_49_axes[] = { 0 };
-const uint32_t ei_dsp_config_49_axes_size = 1;
-ei_dsp_config_mfe_t ei_dsp_config_49 = {
-    49, // uint32_t blockId
+EI_CLASSIFIER_DSP_AXES_INDEX_TYPE ei_dsp_config_120_axes[] = { 0 };
+const uint32_t ei_dsp_config_120_axes_size = 1;
+ei_dsp_config_mfe_t ei_dsp_config_120 = {
+    120, // uint32_t blockId
     4, // int implementationVersion
     1, // int length of axes
     NULL, // named axes
@@ -68,30 +68,30 @@ ei_dsp_config_mfe_t ei_dsp_config_49 = {
 
 const uint8_t ei_dsp_blocks_size = 1;
 ei_model_dsp_t ei_dsp_blocks[ei_dsp_blocks_size] = {
-    { // DSP block 49
-        49,
+    { // DSP block 120
+        120,
         992, // output size
         &extract_mfe_features, // DSP function pointer
-        (void*)&ei_dsp_config_49, // pointer to config struct
-        ei_dsp_config_49_axes, // array of offsets into the input stream, one for each axis
-        ei_dsp_config_49_axes_size, // number of axes
+        (void*)&ei_dsp_config_120, // pointer to config struct
+        ei_dsp_config_120_axes, // array of offsets into the input stream, one for each axis
+        ei_dsp_config_120_axes_size, // number of axes
         1, // version
         nullptr, // factory function
     }
 };
-const ei_config_tflite_eon_graph_t ei_config_tflite_graph_50 = {
+const ei_config_tflite_eon_graph_t ei_config_tflite_graph_121 = {
     .implementation_version = 1,
-    .model_init = &tflite_learn_50_init,
-    .model_invoke = &tflite_learn_50_invoke,
-    .model_reset = &tflite_learn_50_reset,
-    .model_input = &tflite_learn_50_input,
-    .model_output = &tflite_learn_50_output,
+    .model_init = &tflite_learn_121_init,
+    .model_invoke = &tflite_learn_121_invoke,
+    .model_reset = &tflite_learn_121_reset,
+    .model_input = &tflite_learn_121_input,
+    .model_output = &tflite_learn_121_output,
 };
 
-ei_learning_block_config_tflite_graph_t ei_learning_block_config_50 = {
+ei_learning_block_config_tflite_graph_t ei_learning_block_config_121 = {
     .implementation_version = 1,
     .classification_mode = EI_CLASSIFIER_CLASSIFICATION_MODE_CLASSIFICATION,
-    .block_id = 50,
+    .block_id = 121,
     .object_detection = 0,
     .object_detection_last_layer = EI_CLASSIFIER_LAST_LAYER_UNKNOWN,
     .output_data_tensor = 0,
@@ -100,42 +100,42 @@ ei_learning_block_config_tflite_graph_t ei_learning_block_config_50 = {
     .threshold = 0,
     .quantized = 1,
     .compiled = 1,
-    .graph_config = (void*)&ei_config_tflite_graph_50
+    .graph_config = (void*)&ei_config_tflite_graph_121
 };
 
 const uint8_t ei_learning_blocks_size = 1;
-const uint32_t ei_learning_block_50_inputs[1] = { 49 };
-const uint8_t ei_learning_block_50_inputs_size = 1;
+const uint32_t ei_learning_block_121_inputs[1] = { 120 };
+const uint8_t ei_learning_block_121_inputs_size = 1;
 const ei_learning_block_t ei_learning_blocks[ei_learning_blocks_size] = {
     {
-        50,
+        121,
         false,
         &run_nn_inference,
-        (void*)&ei_learning_block_config_50,
+        (void*)&ei_learning_block_config_121,
         EI_CLASSIFIER_IMAGE_SCALING_NONE,
-        ei_learning_block_50_inputs,
-        ei_learning_block_50_inputs_size,
-        6
+        ei_learning_block_121_inputs,
+        ei_learning_block_121_inputs_size,
+        5
     },
 };
 
-const ei_performance_calibration_config_t ei_posprocessing_config_51 = {
+const ei_performance_calibration_config_t ei_posprocessing_config_122 = {
     1, /* integer version number */
     true, /* has configured performance calibration */
-    188, /* average duration window ms */
-    0.49750981164141833, /* detection threshold */
-    1318,  /* suppression ms */
-    0x1F, /* suppression flags */
+    170, /* average duration window ms */
+    0.412437327497781, /* detection threshold */
+    58,  /* suppression ms */
+    0xF, /* suppression flags */
 };
 const size_t ei_postprocessing_blocks_size = 1;
 const ei_postprocessing_block_t ei_postprocessing_blocks[ei_postprocessing_blocks_size] = {
     {
-        .block_id = 51,
+        .block_id = 122,
         .init_fn = &init_perfcal,
         .deinit_fn = &deinit_perfcal,
         .postprocess_fn = &process_perfcal,
         .display_fn = &display_perfcal,
-        .config = (void*)&ei_posprocessing_config_51
+        .config = (void*)&ei_posprocessing_config_122
     },
 };
 
@@ -148,9 +148,9 @@ const ei_impulse_t impulse_685564_0 = {
     .project_id = 685564,
     .project_owner = "Ahnaf",
     .project_name = "Speech_emotion",
-    .impulse_id = 8,
-    .impulse_name = "mfe-conv2d-cda",
-    .deploy_version = 13,
+    .impulse_id = 24,
+    .impulse_name = "mfe-conv2d-066",
+    .deploy_version = 14,
 
     .nn_input_frame_size = 992,
     .raw_sample_count = 16000,
@@ -171,7 +171,7 @@ const ei_impulse_t impulse_685564_0 = {
     .visual_ad_grid_size_x = 0,
     .visual_ad_grid_size_y = 0,
     
-    .tflite_output_features_count = 6,
+    .tflite_output_features_count = 5,
     .learning_blocks_size = ei_learning_blocks_size,
     .learning_blocks = ei_learning_blocks,
 
@@ -186,7 +186,7 @@ const ei_impulse_t impulse_685564_0 = {
     .slices_per_model_window = 4,
 
     .has_anomaly = EI_ANOMALY_TYPE_UNKNOWN,
-    .label_count = 6,
+    .label_count = 5,
     .categories = ei_classifier_inferencing_categories,
     .object_detection_nms = ei_object_detection_nms
 };
