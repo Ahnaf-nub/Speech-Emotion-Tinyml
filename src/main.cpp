@@ -2,6 +2,9 @@
 #include <Speech_emotion_inferencing.h>
 #include <I2S.h>
 #include <M5StickCPlus.h>
+#include "efontEnableAll.h"
+#include "efont.h"
+#include "efontM5StickCPlus.h"
 
 #define SAMPLE_RATE 16000U  
 #define SAMPLE_BITS 16
@@ -109,8 +112,8 @@ void setup() {
     M5.Lcd.setTextColor(WHITE, BLACK);
     M5.Lcd.fillScreen(BLACK);
     M5.Lcd.setCursor(0, 0);
-    M5.Lcd.println("Edge Impulse\nInferencing...");
-
+    M5.Lcd.setRotation(1);
+    printEfont("こんにちは!", 0, 16*1);
     // I2S pins for M5Stack C-Plus with SPM1423
     I2S.setAllPins(-1, 0, 34, -1, -1); // BCLK=-1, WS=GPIO 0, DIN=GPIO 34
     if (!I2S.begin(PDM_MONO_MODE, SAMPLE_RATE, SAMPLE_BITS)) {
@@ -125,9 +128,7 @@ void setup() {
     ei_printf("\tFrame size: %d\n", EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE);
     ei_printf("\tSample length: %d ms.\n", EI_CLASSIFIER_RAW_SAMPLE_COUNT / 16);
     ei_printf("\tNo. of classes: %d\n", sizeof(ei_classifier_inferencing_categories) / sizeof(ei_classifier_inferencing_categories[0]));
-
-    ei_printf("\nStarting continuous inference in 2 seconds...\n");
-    ei_sleep(2000);
+    ei_sleep(3000);
 
     if (microphone_inference_start(EI_CLASSIFIER_RAW_SAMPLE_COUNT) == false) {
         ei_printf("ERR: Could not allocate audio buffer (size %d), this could be due to the window length of your model\r\n", EI_CLASSIFIER_RAW_SAMPLE_COUNT);
@@ -135,6 +136,8 @@ void setup() {
     }
 
     ei_printf("Recording...\n");
+    M5.Lcd.setRotation(0);
+
 }
 
 void loop() {
